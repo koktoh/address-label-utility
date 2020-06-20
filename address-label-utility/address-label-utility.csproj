@@ -6,6 +6,24 @@
     <RootNamespace>AddressLabelUtility</RootNamespace>
     <UseWPF>true</UseWPF>
     <AssemblyName>AddressLabelUtility</AssemblyName>
+    <Version>0.1.0</Version>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\address-label-utility-core\address-label-utility-core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="gong-wpf-dragdrop" Version="2.2.0" />
+    <PackageReference Include="Prism.Unity" Version="7.2.0.1422" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

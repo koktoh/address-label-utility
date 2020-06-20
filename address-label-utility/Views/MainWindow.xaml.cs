@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace AddressLabelUtility
+namespace AddressLabelUtility.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
