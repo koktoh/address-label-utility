@@ -1,0 +1,160 @@
+﻿<UserControl x:Class="AddressLabelUtility.Views.LabelMakerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:local="clr-namespace:AddressLabelUtility.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="LeftAlignmentHeader" TargetType="GridViewColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <GroupBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Margin="5" FontSize="15" Header="出力先">
+            <TextBox FontSize="15" Text="{Binding OutputPath}" />
+        </GroupBox>
+        <GroupBox Grid.Row="0" Grid.Column="3" Margin="5" FontSize="15" Header="ファイル名">
+            <TextBox FontSize="15" Text="{Binding FileName}" />
+        </GroupBox>
+        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" FontSize="15" Header="宛て先ソースファイル">
+            <TextBox FontSize="15" Text="{Binding ToAddressSrcPath}" AllowDrop="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewDragOver">
+                        <prism:InvokeCommandAction Command="{Binding PreviewDragOverCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <prism:InvokeCommandAction Command="{Binding DropToAddressCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </GroupBox>
+        <GroupBox Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2" Margin="5" FontSize="15" Header="差出人ソースファイル">
+            <TextBox FontSize="15" Text="{Binding FromAddressSrcPath}" AllowDrop="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewDragOver">
+                        <prism:InvokeCommandAction Command="{Binding PreviewDragOverCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <prism:InvokeCommandAction Command="{Binding DropFromAddressCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TextBox>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="5" FontSize="15" Header="宛て先">
+            <ListView ItemsSource="{Binding ToAddressList}" AllowDrop="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewDragOver">
+                        <prism:InvokeCommandAction Command="{Binding PreviewDragOverCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <prism:InvokeCommandAction Command="{Binding DropToAddressCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListView.Resources>
+                    <DataTemplate x:Key="CheckCell">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Path=IsSelected}" />
+                        </StackPanel>
+                    </DataTemplate>
+                    <DataTemplate x:Key="SuffixList">
+                        <StackPanel Orientation="Horizontal" Width="70">
+                            <ComboBox ItemsSource="{Binding Path=NameSuffix, Converter={local:EnumConverter}}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding Path=NameSuffix}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView ColumnHeaderContainerStyle="{StaticResource LeftAlignmentHeader}">
+                        <GridViewColumn CellTemplate="{StaticResource CheckCell}" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=PostCode}" Header="郵便番号" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=FullAddress}" Header="住所" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="氏名" />
+                        <GridViewColumn CellTemplate="{StaticResource SuffixList}" Header="敬称"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+        <GroupBox Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2" Margin="5" FontSize="15" Header="差出人">
+            <ListView ItemsSource="{Binding FromAddressList}" AllowDrop="True">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="PreviewDragOver">
+                        <prism:InvokeCommandAction Command="{Binding PreviewDragOverCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="Drop">
+                        <prism:InvokeCommandAction Command="{Binding DropFromAddressCommand}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+                <ListView.Resources>
+                    <DataTemplate x:Key="RadioCell">
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton GroupName="AddressSelection" IsChecked="{Binding Path=IsSelected}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.Resources>
+                <ListView.View>
+                    <GridView ColumnHeaderContainerStyle="{StaticResource LeftAlignmentHeader}">
+                        <GridViewColumn CellTemplate="{StaticResource RadioCell}" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=PostCode}" Header="郵便番号" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=FullAddress}" Header="住所" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="氏名" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
+        <GroupBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="4" Margin="5" FontSize="15" Header="設定">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Margin="0 0 2 0" VerticalAlignment="Center" FontSize="15" Text="用紙サイズ" />
+                <ComboBox Grid.Column="1" Margin="2 0 5 0" VerticalAlignment="Center" ItemsSource="{Binding PdfSize, Converter={local:EnumConverter}}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding PdfSize}" />
+                <TextBlock Grid.Column="2" Margin="5 0 2 0" VerticalAlignment="Center" FontSize="15" Text="DPI" />
+                <TextBox Grid.Column="3" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding Dpi}" />
+                <TextBlock Grid.Column="4" Margin="5 0 2 0" VerticalAlignment="Center" FontSize="15" Text="面付" />
+                <TextBox Grid.Column="5" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding ParPage}" />
+                <TextBlock Grid.Column="6" Margin="5 0 2 0" VerticalAlignment="Center" FontSize="15" Text="ラベル余白(%)" />
+                <TextBox Grid.Column="7" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding MarginRatio}" />
+                <TextBlock Grid.Column="8" Margin="5 0 2 0" VerticalAlignment="Center" FontSize="15" Text="ラベル枠線幅" />
+                <TextBox Grid.Column="9" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding LineWidth}" />
+                <CheckBox Grid.Column="10" Grid.ColumnSpan="2" Margin="5 0 0 0" FontSize="15" VerticalContentAlignment="Center" Content="分割線表示" IsChecked="{Binding IsVisibleLine}" />
+            </Grid>
+        </GroupBox>
+        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Column="0" Margin="5" FontSize="15" Header="ステータス">
+                <TextBlock Margin="5" FontSize="15" Text="{Binding Status}" />
+            </GroupBox>
+            <Button Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Height="25" Width="100" Margin="5" FontSize="15" Content="Run" Command="{Binding ExecuteCommand}" />
+        </Grid>
+    </Grid>
+</UserControl>
