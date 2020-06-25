@@ -43,7 +43,7 @@ namespace AddressLabelUtilityCore.Csv.Models
         [Index(13)]
         public override string PhoneNumber { get; set; }
         [Index(14)]
-        public override string Item { get => this._item?.Split('/').LastOrDefault(); set => this._item = value; }
+        public override string Item { get => this._item?.Split('/').LastOrDefault().Trim(); set => this._item = value; }
 
         #region for abstract class
 

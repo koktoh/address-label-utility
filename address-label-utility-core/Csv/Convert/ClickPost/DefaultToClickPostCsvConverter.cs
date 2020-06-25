@@ -9,7 +9,7 @@ namespace AddressLabelUtilityCore.Csv.Convert.ClickPost
     {
         public IEnumerable<ICsvModel> Convert(IEnumerable<ICsvModel> records)
         {
-            var dest = records.Cast<ClickPostAddressCsvModel>();
+            var dest = records.CopyTo<ClickPostAddressCsvModel>();
 
             return dest.Select(x =>
             {

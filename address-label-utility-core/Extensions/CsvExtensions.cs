@@ -7,8 +7,7 @@ namespace AddressLabelUtilityCore.Extensions
 {
     public static class CsvExtensions
     {
-        public static TDest CopyTo<TSource, TDest>(this TSource source)
-            where TSource : ICsvModel
+        public static TDest CopyTo<TDest>(this ICsvModel source)
             where TDest : ICsvModel
         {
             var ins = (TDest)Activator.CreateInstance(typeof(TDest));
@@ -30,11 +29,10 @@ namespace AddressLabelUtilityCore.Extensions
             return ins;
         }
 
-        public static IEnumerable<TDest> CopyTo<TSource, TDest>(this IEnumerable<TSource> source)
-            where TSource : ICsvModel
+        public static IEnumerable<TDest> CopyTo<TDest>(this IEnumerable<ICsvModel> source)
             where TDest : ICsvModel
         {
-            return source.Select(x => x.CopyTo<TSource, TDest>());
+            return source.Select(x => x.CopyTo<TDest>());
         }
     }
 }

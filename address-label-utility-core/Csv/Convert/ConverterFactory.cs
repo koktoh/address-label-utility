@@ -57,11 +57,11 @@ namespace AddressLabelUtilityCore.Csv.Convert
         {
             if (typeof(TDest) == typeof(BoothAddressCsvModel))
             {
-                return new BoothToDefaultCsvConverter();
+                return new DefaultToBoothCsvConverter();
             }
             else if (typeof(TDest) == typeof(ClickPostAddressCsvModel))
             {
-                return new ClickPostToDefaultCsvConverter();
+                return new DefaultToClickPostCsvConverter();
             }
             else
             {
@@ -73,8 +73,8 @@ namespace AddressLabelUtilityCore.Csv.Convert
         {
             return kind switch
             {
-                ConvertKind.BOOTH => new BoothToDefaultCsvConverter(),
-                ConvertKind.クリックポスト => new ClickPostToDefaultCsvConverter(),
+                ConvertKind.BOOTH => new DefaultToBoothCsvConverter(),
+                ConvertKind.クリックポスト => new DefaultToClickPostCsvConverter(),
                 _ => new DefaultConverter(),
             };
         }
