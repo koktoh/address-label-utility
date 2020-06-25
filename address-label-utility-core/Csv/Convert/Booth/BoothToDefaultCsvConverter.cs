@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using AddressLabelUtilityCore.Csv.Models;
+using AddressLabelUtilityCore.Extensions;
 
 namespace AddressLabelUtilityCore.Csv.Convert.Booth
 {
@@ -8,7 +8,7 @@ namespace AddressLabelUtilityCore.Csv.Convert.Booth
     {
         public IEnumerable<ICsvModel> Convert(IEnumerable<ICsvModel> records)
         {
-            return records.Cast<DefaultAddressCsvModel>();
+            return records.CopyTo<DefaultAddressCsvModel>();
         }
     }
 }

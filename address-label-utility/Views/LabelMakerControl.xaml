@@ -136,13 +136,13 @@
                 <TextBlock Grid.Column="0" Margin="0 0 2 0" VerticalAlignment="Center" FontSize="15" Text="用紙サイズ" />
                 <ComboBox Grid.Column="1" Margin="2 0 5 0" VerticalAlignment="Center" ItemsSource="{Binding PdfSize, Converter={local:EnumConverter}}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding PdfSize}" />
                 <TextBlock Grid.Column="2" Margin="5 0 2 0" VerticalAlignment="Center" FontSize="15" Text="DPI" />
-                <TextBox Grid.Column="3" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding Dpi}" />
+                <local:NumericTextBox Grid.Column="3" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding Dpi}" />
                 <TextBlock Grid.Column="4" Margin="5 0 2 0" VerticalAlignment="Center" FontSize="15" Text="面付" />
-                <TextBox Grid.Column="5" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding ParPage}" />
+                <local:IntegerTextBox Grid.Column="5" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding ParPage}" />
                 <TextBlock Grid.Column="6" Margin="5 0 2 0" VerticalAlignment="Center" FontSize="15" Text="ラベル余白(%)" />
-                <TextBox Grid.Column="7" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding MarginRatio}" />
+                <local:NumericTextBox Grid.Column="7" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding MarginRatio}" />
                 <TextBlock Grid.Column="8" Margin="5 0 2 0" VerticalAlignment="Center" FontSize="15" Text="ラベル枠線幅" />
-                <TextBox Grid.Column="9" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding LineWidth}" />
+                <local:IntegerTextBox Grid.Column="9" Margin="2 0 5 0" VerticalAlignment="Center" TextAlignment="Right" FontSize="15" Text="{Binding LineWidth}" />
                 <CheckBox Grid.Column="10" Grid.ColumnSpan="2" Margin="5 0 0 0" FontSize="15" VerticalContentAlignment="Center" Content="分割線表示" IsChecked="{Binding IsVisibleLine}" />
             </Grid>
         </GroupBox>

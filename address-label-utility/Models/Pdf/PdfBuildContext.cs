@@ -12,6 +12,14 @@ namespace AddressLabelUtility.Models.Pdf
         public LabelContext LabelContext { get; set; } = new LabelContext();
         public IEnumerable<IAddress> ToAddressList { get; set; }
         public IAddress FromAddress { get; set; }
-        public IEnumerable<LabelContent> LabelContents { get => this.ToAddressList.Select(x => new LabelContent(x, this.FromAddress)); }
+        public IEnumerable<LabelContent> LabelContents
+        {
+            get =>
+                this.ToAddressList
+                    .Select(x =>
+                        new LabelContent(
+                            new DefaultAddress(x),
+                            new DefaultAddress(this.FromAddress)));
+        }
     }
 }

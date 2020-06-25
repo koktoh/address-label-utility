@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AddressLabelUtility.Views"
         mc:Ignorable="d"
-        Title="宛名ユーティリティ" Height="450" Width="800">
+        Title="宛名ユーティリティ" Height="600" Width="800">
     <Grid>
         <TabControl>
             <TabItem FontSize="15" Header="宛名ラベル">

@@ -9,7 +9,7 @@ namespace AddressLabelUtilityCore.Csv.Convert.Booth
     {
         public IEnumerable<ICsvModel> Convert(IEnumerable<ICsvModel> records)
         {
-            var dest = records.Cast<BoothAddressCsvModel>();
+            var dest = records.CopyTo<BoothAddressCsvModel>();
 
             return dest.Select(x =>
             {
