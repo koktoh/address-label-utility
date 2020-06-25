@@ -87,7 +87,49 @@ namespace AddressLabelUtilityCore.Pdf
                 }
             }
 
+            if (this._pdfContext.IsVisibleSeparateLine)
+            {
+                this.DrawSeparateLine(canvas);
+            }
+
             doc.EndPage();
+        }
+
+        private void DrawSeparateLine(SKCanvas canvas)
+        {
+            var paint = new SKPaint
+            {
+                StrokeWidth = 1,
+                Color = SKColors.Black,
+            };
+
+            var columnCount = this._layoutProperty.LabelColumnCount;
+            var rowCount = this._layoutProperty.LabelRowCount;
+
+            var pdfWidth = this._layoutProperty.PageWidth;
+            var pdfHeight = this._layoutProperty.PageHeight;
+
+            if (columnCount > 1)
+            {
+                var width = this._layoutProperty.UnitSize.Width;
+
+                for (int i = 1; i < columnCount; i++)
+                {
+                    canvas.DrawLine(i * width, 0, i * width, pdfHeight, paint);
+                }
+            }
+
+            if (rowCount > 1)
+            {
+                var height = this._layoutProperty.UnitSize.Height;
+
+                for (int i = 1; i < rowCount; i++)
+                {
+                    canvas.DrawLine(0, i * height, pdfWidth, i * height, paint);
+                }
+            }
+
+            canvas.Save();
         }
 
         public void DrawLabel(LabelContent labelContent, SKCanvas canvas, float x, float y)
