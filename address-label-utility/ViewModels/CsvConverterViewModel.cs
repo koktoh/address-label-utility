@@ -4,6 +4,7 @@ using System.Windows;
 using AddressLabelUtility.Models.Csv;
 using AddressLabelUtilityCore.Csv.Convert;
 using AddressLabelUtilityCore.Csv.Infer;
+using AddressLabelUtilityCore.Exceptions;
 using AddressLabelUtilityCore.Extensions;
 using GongSolutions.Wpf.DragDrop;
 using Prism.Commands;
@@ -97,9 +98,14 @@ namespace AddressLabelUtility.ViewModels
                 var builder = new CsvBuilder(context);
                 builder.Build();
             }
+            catch　(CsvException ex)
+            {
+                this.Status = ex.Message;
+                return;
+            }
             catch
             {
-                this.Status = "変換エラー";
+                this.Status = "不明なエラー";
                 return;
             }
 

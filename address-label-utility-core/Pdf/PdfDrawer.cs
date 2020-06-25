@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using AddressLabelUtilityCore.Exceptions;
 using AddressLabelUtilityCore.Extensions;
 using AddressLabelUtilityCore.Label;
 using AddressLabelUtilityCore.Layout;
@@ -37,14 +39,25 @@ namespace AddressLabelUtilityCore.Pdf
 
         public void Draw(IEnumerable<LabelContent> labelContents)
         {
-            using var doc = SKDocument.CreatePdf(Path.Combine(this._pdfContext.OutputPath, this._pdfContext.FileName));
-
-            foreach (var contents in labelContents.GroupByCount(this._labelContext.ParPage))
+            try
             {
-                this.DrawPage(contents, doc);
-            }
+                using var doc = SKDocument.CreatePdf(Path.Combine(this._pdfContext.OutputPath, this._pdfContext.FileName));
 
-            doc.Close();
+                foreach (var contents in labelContents.GroupByCount(this._labelContext.ParPage))
+                {
+                    this.DrawPage(contents, doc);
+                }
+
+                doc.Close();
+            }
+            catch (IOException ex)
+            {
+                throw new PdfIOException("PDFに書き込めません", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new PdfException("PDF作成中に不明なエラーが発生しました", ex);
+            }
         }
 
         private void DrawPage(IEnumerable<LabelContent> labelContents, SKDocument doc)

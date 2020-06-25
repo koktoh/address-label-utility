@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AddressLabelUtilityCore.Csv.Models;
+using AddressLabelUtilityCore.Exceptions;
 
 namespace AddressLabelUtilityCore.Csv.Convert
 {
@@ -17,10 +19,17 @@ namespace AddressLabelUtilityCore.Csv.Convert
 
         public IEnumerable<ICsvModel> Convert(IEnumerable<ICsvModel> records)
         {
-            var defaultRecords = this.ConvartToDefaultCsvModel(records);
-            var destRecords = this.ConvertFromDefaultCsvModel(defaultRecords);
+            try
+            {
+                var defaultRecords = this.ConvartToDefaultCsvModel(records);
+                var destRecords = this.ConvertFromDefaultCsvModel(defaultRecords);
 
-            return destRecords.ToList();
+                return destRecords.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new CsvConvertException("データの変換に失敗しました", ex);
+            }
         }
 
         private IEnumerable<ICsvModel> ConvartToDefaultCsvModel(IEnumerable<ICsvModel> records)

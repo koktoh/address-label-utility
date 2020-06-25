@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using AddressLabelUtilityCore.Address;
+using AddressLabelUtilityCore.Exceptions;
 using AddressLabelUtilityCore.Extensions;
 using AddressLabelUtilityCore.Layout;
 using SkiaSharp;
@@ -19,14 +21,21 @@ namespace AddressLabelUtilityCore.Label
 
         public SKBitmap Draw(string header, AddressBase address)
         {
-            var bitmap = new SKBitmap(this._layoutProperty.LabelWidth.ToInt(), this._layoutProperty.LabelHeight.ToInt());
-            using var canvas = new SKCanvas(bitmap);
+            try
+            {
+                var bitmap = new SKBitmap(this._layoutProperty.LabelWidth.ToInt(), this._layoutProperty.LabelHeight.ToInt());
+                using var canvas = new SKCanvas(bitmap);
 
-            this.DrawOutline(canvas);
-            this.DrawHeader(canvas, header);
-            this.DrawAddress(canvas, address);
+                this.DrawOutline(canvas);
+                this.DrawHeader(canvas, header);
+                this.DrawAddress(canvas, address);
 
-            return bitmap;
+                return bitmap;
+            }
+            catch (Exception ex)
+            {
+                throw new LabelDrawingExeption("ラベル描画中にエラーが発生しました", ex);
+            }
         }
 
         private void DrawOutline(SKCanvas canvas)

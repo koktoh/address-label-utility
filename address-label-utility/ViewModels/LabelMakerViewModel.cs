@@ -6,6 +6,7 @@ using AddressLabelUtility.Models.Pdf;
 using AddressLabelUtilityCore.Address;
 using AddressLabelUtilityCore.Csv.Infer;
 using AddressLabelUtilityCore.Csv.IO;
+using AddressLabelUtilityCore.Exceptions;
 using AddressLabelUtilityCore.Extensions;
 using AddressLabelUtilityCore.Label;
 using AddressLabelUtilityCore.Pdf;
@@ -207,9 +208,14 @@ namespace AddressLabelUtility.ViewModels
                 var builder = new PdfBuilder(context);
                 builder.Build();
             }
+            catch (Exception ex) when (ex is LayoutException || ex is LabelException || ex is PdfException)
+            {
+                this.Status = ex.Message;
+                return;
+            }
             catch
             {
-                this.Status = "PDF作成エラー";
+                this.Status = "不明なエラー";
                 return;
             }
 

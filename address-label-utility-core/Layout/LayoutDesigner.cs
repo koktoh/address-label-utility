@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AddressLabelUtilityCore.Exceptions;
 using AddressLabelUtilityCore.Label;
 using AddressLabelUtilityCore.Pdf;
 using AddressLabelUtilityCore.Utilities;
@@ -25,30 +26,38 @@ namespace AddressLabelUtilityCore.Layout
 
         public LayoutProperty Design()
         {
-            var rowCount = this.CalcRowCount(this._labelContext.ParPage);
-            var columnCount = this.CalcColumnCount(this._labelContext.ParPage);
-
-            var unitSize = this.CalcUnitSize(rowCount, columnCount);
-            var margin = this._labelContext.MarginRatio / 100 * (unitSize.Width > unitSize.Height ? unitSize.Width : unitSize.Height);
-            var orientation = unitSize.Width > unitSize.Height ? LabelOrientation.Hirizontal : LabelOrientation.Vertical;
-
-            var labelWidth = this.CalcLabelWidth(unitSize, margin, orientation);
-            var labelHeight = this.CalcLabelHeight(unitSize, margin, orientation);
-
-            return new LayoutProperty
+            try
             {
-                PageWidth = this._pageWidth,
-                PageHeight = this._pageHeight,
-                UnitSize = unitSize,
-                Margin = margin,
-                LabelRowCount = rowCount,
-                LabelColumnCount = columnCount,
-                LabelWidth = labelWidth,
-                LabelHeight = labelHeight,
-                LabelHeaderWidth = this.CalcLabelHeaderWidth(labelWidth),
-                LabelHeaderHeight = this.CalcLableHeaderHeight(labelHeight),
-                LabelOrientation = orientation,
-            };
+
+                var rowCount = this.CalcRowCount(this._labelContext.ParPage);
+                var columnCount = this.CalcColumnCount(this._labelContext.ParPage);
+
+                var unitSize = this.CalcUnitSize(rowCount, columnCount);
+                var margin = this._labelContext.MarginRatio / 100 * (unitSize.Width > unitSize.Height ? unitSize.Width : unitSize.Height);
+                var orientation = unitSize.Width > unitSize.Height ? LabelOrientation.Hirizontal : LabelOrientation.Vertical;
+
+                var labelWidth = this.CalcLabelWidth(unitSize, margin, orientation);
+                var labelHeight = this.CalcLabelHeight(unitSize, margin, orientation);
+
+                return new LayoutProperty
+                {
+                    PageWidth = this._pageWidth,
+                    PageHeight = this._pageHeight,
+                    UnitSize = unitSize,
+                    Margin = margin,
+                    LabelRowCount = rowCount,
+                    LabelColumnCount = columnCount,
+                    LabelWidth = labelWidth,
+                    LabelHeight = labelHeight,
+                    LabelHeaderWidth = this.CalcLabelHeaderWidth(labelWidth),
+                    LabelHeaderHeight = this.CalcLableHeaderHeight(labelHeight),
+                    LabelOrientation = orientation,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new LayoutCalculatingException("レイアウト計算中にエラーが発生しました", ex);
+            }
         }
 
         private int CalcRowCount(int labelCount)
