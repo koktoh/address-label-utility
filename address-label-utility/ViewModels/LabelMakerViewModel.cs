@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using AddressLabelUtility.Models.Pdf;
@@ -10,6 +11,7 @@ using AddressLabelUtilityCore.Exceptions;
 using AddressLabelUtilityCore.Extensions;
 using AddressLabelUtilityCore.Label;
 using AddressLabelUtilityCore.Pdf;
+using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -22,6 +24,7 @@ namespace AddressLabelUtility.ViewModels
         private readonly LabelContext _labelContext;
         private readonly PdfContext _pdfContext;
         private readonly Inferencer _inferencer;
+        private readonly OpenFileDialog _dialog;
 
         private string _outputPath;
         private string _fileName;
@@ -40,6 +43,8 @@ namespace AddressLabelUtility.ViewModels
         private string _status;
 
         private DelegateCommand _executeCommand;
+        private DelegateCommand _openToAddressFileCommand;
+        private DelegateCommand _openFromAddressFileCommand;
         private DelegateCommand<DragEventArgs> _previewDragOverCommand;
         private DelegateCommand<DragEventArgs> _dropToAddressCommand;
         private DelegateCommand<DragEventArgs> _dropFromAddressCommand;
@@ -133,6 +138,12 @@ namespace AddressLabelUtility.ViewModels
         public DelegateCommand ExecuteCommand
             => this._executeCommand ??= new DelegateCommand(this.Execute);
 
+        public DelegateCommand OpenToAddressFileCommand
+            => this._openToAddressFileCommand ??= new DelegateCommand(this.OpenToAddressFile);
+
+        public DelegateCommand OpenFromAddressFileCommand
+            => this._openFromAddressFileCommand ??= new DelegateCommand(this.OpenFromAddressFile);
+
         public DelegateCommand<DragEventArgs> PreviewDragOverCommand
             => this._previewDragOverCommand ??= new DelegateCommand<DragEventArgs>(this.PreviewDragOver);
 
@@ -149,6 +160,12 @@ namespace AddressLabelUtility.ViewModels
         public LabelMakerViewModel()
         {
             this._inferencer = new Inferencer();
+
+            this._dialog = new OpenFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                Filter = "CSV File|*.csv|All|*.*",
+            };
 
             this.OutputPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             this.FileName = "output.pdf";
@@ -222,6 +239,56 @@ namespace AddressLabelUtility.ViewModels
             this.Status = "出力終了";
         }
 
+        public void OpenToAddressFile()
+        {
+            if (this._dialog.ShowDialog() == true)
+            {
+                this.FillToAddressInfo(this._dialog.FileName);
+            }
+        }
+
+        public void OpenFromAddressFile()
+        {
+            if (this._dialog.ShowDialog() == true)
+            {
+                this.FillFromAddressInfo(this._dialog.FileName);
+            }
+        }
+
+        private void FillToAddressInfo(string path)
+        {
+            var type = this.InferCsvModel(path);
+
+            var addressList = CsvReader.Read(type, path)
+                .Cast<IAddress>()
+                .Select(x => new BindableAddress(x));
+
+            this.ToAddressSrcPath = path;
+            this.ToAddressList = new ObservableCollection<BindableAddress>(addressList);
+        }
+
+        private void FillFromAddressInfo(string path)
+        {
+            var type = this.InferCsvModel(path);
+
+            var addressList = CsvReader.Read(type, path)
+                .Cast<IAddress>()
+                .Select(x => new BindableAddress(x));
+
+            this.FromAddressSrcPath = path;
+            this.FromAddressList = new ObservableCollection<BindableAddress>(addressList);
+        }
+
+        private bool IsCsvFile(string path)
+        {
+            return path.HasMeaningfulValue() && path.ToLower().EndsWith(".csv");
+        }
+
+        private Type InferCsvModel(string path)
+        {
+            return this._inferencer.Infer(path);
+        }
+
         #region Events
 
         public void PreviewDragOver(DragEventArgs e)
@@ -253,14 +320,7 @@ namespace AddressLabelUtility.ViewModels
 
             try
             {
-                var type = this.InferCsvModel(file);
-
-                var addressList = CsvReader.Read(type, file)
-                    .Cast<IAddress>()
-                    .Select(x => new BindableAddress(x));
-
-                this.ToAddressSrcPath = file;
-                this.ToAddressList = new ObservableCollection<BindableAddress>(addressList);
+                this.FillToAddressInfo(file);
             }
             catch
             {
@@ -284,29 +344,12 @@ namespace AddressLabelUtility.ViewModels
 
             try
             {
-                var type = this.InferCsvModel(file);
-
-                var addressList = CsvReader.Read(type, file)
-                    .Cast<IAddress>()
-                    .Select(x => new BindableAddress(x));
-
-                this.FromAddressSrcPath = file;
-                this.FromAddressList = new ObservableCollection<BindableAddress>(addressList);
+                this.FillFromAddressInfo(file);
             }
             catch
             {
                 this.Status = "ファイル読み込みエラー";
             }
-        }
-
-        private bool IsCsvFile(string path)
-        {
-            return path.HasMeaningfulValue() && path.ToLower().EndsWith(".csv");
-        }
-
-        private Type InferCsvModel(string path)
-        {
-            return this._inferencer.Infer(path);
         }
 
         #endregion

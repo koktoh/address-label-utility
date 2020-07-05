@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using AddressLabelUtility.Models.Csv;
@@ -7,6 +8,7 @@ using AddressLabelUtilityCore.Csv.Infer;
 using AddressLabelUtilityCore.Exceptions;
 using AddressLabelUtilityCore.Extensions;
 using GongSolutions.Wpf.DragDrop;
+using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
 
@@ -17,6 +19,7 @@ namespace AddressLabelUtility.ViewModels
         #region Private fields
 
         private readonly Inferencer _inferencer;
+        private readonly OpenFileDialog _dialog;
 
         private string _srcPath;
         private string _destPath;
@@ -25,6 +28,7 @@ namespace AddressLabelUtility.ViewModels
         private string _status;
 
         private DelegateCommand _runCommand;
+        private DelegateCommand _openFileCommand;
 
         #endregion
 
@@ -67,6 +71,9 @@ namespace AddressLabelUtility.ViewModels
         public DelegateCommand RunCommand
             => this._runCommand ??= new DelegateCommand(this.Execute);
 
+        public DelegateCommand OpenFileCommand
+            => this._openFileCommand ??= new DelegateCommand(this.OpenFile);
+
         #endregion
 
         #region Constructor
@@ -74,6 +81,12 @@ namespace AddressLabelUtility.ViewModels
         public CsvConverterViewModel()
         {
             this._inferencer = new Inferencer();
+
+            this._dialog = new OpenFileDialog
+            {
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                Filter = "CSV File|*.csv|All|*.*",
+            };
 
             this.SrcKind = ConvertKind.デフォルト;
             this.DestKind = ConvertKind.デフォルト;
@@ -98,7 +111,7 @@ namespace AddressLabelUtility.ViewModels
                 var builder = new CsvBuilder(context);
                 builder.Build();
             }
-            catch　(CsvException ex)
+            catch (CsvException ex)
             {
                 this.Status = ex.Message;
                 return;
@@ -111,6 +124,29 @@ namespace AddressLabelUtility.ViewModels
 
             this.Status = "出力終了";
         }
+
+        public void OpenFile()
+        {
+            if (this._dialog.ShowDialog() == true)
+            {
+                this.FillFileInfo(this._dialog.FileName);
+            }
+        }
+
+        private void FillFileInfo(string path)
+        {
+            this.SrcPath = path;
+            this.DestPath = Path.Combine(Path.GetDirectoryName(path), "output.csv");
+
+            var type = this._inferencer.Infer(path);
+            var kind = ConvertKindResolver.Resolve(type);
+
+            this.SrcKind = kind;
+        }
+
+        #endregion
+
+        #region Events
 
         public void DragOver(IDropInfo dropInfo)
         {
@@ -129,13 +165,7 @@ namespace AddressLabelUtility.ViewModels
 
             try
             {
-                this.SrcPath = file;
-                this.DestPath = Path.Combine(Path.GetDirectoryName(file), "output.csv");
-
-                var type = this._inferencer.Infer(file);
-                var kind = ConvertKindResolver.Resolve(type);
-
-                this.SrcKind = kind;
+                this.FillFileInfo(file);
             }
             catch
             {
