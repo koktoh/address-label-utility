@@ -1,0 +1,46 @@
+﻿using System.IO;
+using AddressLabelUtilityCore.Extensions;
+
+namespace AddressLabelUtilityCli.Arguments.Common
+{
+    internal class Src1Argument : ArgumentBase
+    {
+        public override string[] Alias => new[] { "-s", "--source", "-s1", "--source1" };
+
+        public override string Raw { get; set; }
+
+        public override bool IsRequired => true;
+
+        public override ArgumentKind ArgumentKind => ArgumentKind.SrcPath1;
+
+        public override bool ShouldHaveArgument => true;
+
+        public override string Argument { get; set; }
+
+        public override string GetMessage()
+        {
+            return $"ソースファイル {this.Argument} を読み込みます";
+        }
+
+        public override bool Validate(out string message)
+        {
+            message = string.Empty;
+
+            if (this.Argument.IsNullOrWhiteSpace())
+            {
+                message = "ソースファイルを指定してください";
+
+                return false;
+            }
+
+            if (!File.Exists(this.Argument))
+            {
+                message = $"ファイルが存在しません: {this.Argument}";
+
+                return false;
+            }
+
+            return true;
+        }
+    }
+}
