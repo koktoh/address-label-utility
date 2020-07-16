@@ -53,7 +53,7 @@ namespace AddressLabelUtilityCore.Csv.Infer
             {
                 return typeof(ClickPostAddressCsvModel);
             }
-            else if (this._boothCsvFieldCount == record.Length)
+            else if (this._boothCsvFieldCount == record.Length && this._boothCsvHeaderList.SequenceEqual(record))
             {
                 return typeof(BoothAddressCsvModel);
             }
