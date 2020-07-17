@@ -7,7 +7,7 @@ using AddressLabelUtilityCli.Arguments.Csv;
 using AddressLabelUtilityCli.Arguments.Pdf;
 using AddressLabelUtilityCli.Execute;
 using AddressLabelUtilityCli.Extensions;
-using AddressLabelUtilityCore.Csv.Infer;
+using AddressLabelUtilityCore.Csv.Inference;
 
 namespace AddressLabelUtilityCli.Arguments
 {

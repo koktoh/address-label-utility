@@ -5,7 +5,7 @@ using AddressLabelUtilityCli.Arguments;
 using AddressLabelUtilityCli.Arguments.Common;
 using AddressLabelUtilityCli.Arguments.Csv;
 using AddressLabelUtilityCli.Extensions;
-using AddressLabelUtilityCore.Csv.Convert;
+using AddressLabelUtilityCore.Csv.Converter;
 using AddressLabelUtilityCore.Csv.IO;
 using AddressLabelUtilityCore.Csv.Models;
 
