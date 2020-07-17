@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AddressLabelUtilityCore.Csv.Models;
 
-namespace AddressLabelUtilityCore.Csv.Convert.Default
+namespace AddressLabelUtilityCore.Csv.Converter.Default
 {
     public class DefaultConverter : IConverter
     {

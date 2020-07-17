@@ -10,7 +10,7 @@ using CsvHelper;
 using CsvHelper.Configuration.Attributes;
 using Hnx8.ReadJEnc;
 
-namespace AddressLabelUtilityCore.Csv.Infer
+namespace AddressLabelUtilityCore.Csv.Inference
 {
     public class Inferencer
     {

@@ -3,26 +3,24 @@ using System.Linq;
 using AddressLabelUtilityCore.Csv.Models;
 using AddressLabelUtilityCore.Extensions;
 
-namespace AddressLabelUtilityCore.Csv.Convert.ClickPost
+namespace AddressLabelUtilityCore.Csv.Converter.Booth
 {
-    internal class DefaultToClickPostCsvConverter : IConverter
+    internal class DefaultToBoothCsvConverter : IConverter
     {
         public IEnumerable<ICsvModel> Convert(IEnumerable<ICsvModel> records)
         {
-            var dest = records.CopyTo<ClickPostAddressCsvModel>();
+            var dest = records.CopyTo<BoothAddressCsvModel>();
 
             return dest.Select(x =>
             {
-                if (x.Address5.HasMeaningfulValue())
+                if (x.Address4.HasMeaningfulValue() || x.Address5.HasMeaningfulValue())
                 {
                     x.Address1 += x.Address2;
-                    x.Address2 = x.Address3;
-                    x.Address3 = x.Address4;
-                    x.Address4 = x.Address5;
+                    x.Address2 = x.Address3 + x.Address4;
+                    x.Address3 = x.Address5;
+                    x.Address4 = string.Empty;
                     x.Address5 = string.Empty;
                 }
-
-                x.Item = x.Item.Length <= 15 ? x.Item : x.Item.Substring(0, 15);
 
                 return x;
             });
