@@ -132,7 +132,7 @@ namespace AddressLabelUtilityCore.Pdf
             canvas.Save();
         }
 
-        public void DrawLabel(LabelContent labelContent, SKCanvas canvas, float x, float y)
+        private void DrawLabel(LabelContent labelContent, SKCanvas canvas, float x, float y)
         {
             if (this._layoutProperty.LabelOrientation == LabelOrientation.Hirizontal)
             {
@@ -142,10 +142,9 @@ namespace AddressLabelUtilityCore.Pdf
             {
                 this.DrawLabelVartical(labelContent, canvas, x, y);
             }
-
         }
 
-        public void DrawLabelHorizontal(LabelContent labelContent, SKCanvas canvas, float x, float y)
+        private void DrawLabelHorizontal(LabelContent labelContent, SKCanvas canvas, float x, float y)
         {
             using var toLabel = this._labelDrawer.Draw(TO_HEADER_TEXT, labelContent.ToAddress);
             using var fromLabel = this._labelDrawer.Draw(FROM_HEADER_TEXT, labelContent.FromAddress);
@@ -157,7 +156,7 @@ namespace AddressLabelUtilityCore.Pdf
             canvas.Save();
         }
 
-        public SKBitmap RotateBitmap(SKBitmap bitmap)
+        private SKBitmap RotateBitmap(SKBitmap bitmap)
         {
             var rotatedBmp = new SKBitmap(bitmap.Height, bitmap.Width);
             using var canvas = new SKCanvas(rotatedBmp);
@@ -170,7 +169,7 @@ namespace AddressLabelUtilityCore.Pdf
             return rotatedBmp;
         }
 
-        public void DrawLabelVartical(LabelContent labelContent, SKCanvas canvas, float x, float y)
+        private void DrawLabelVartical(LabelContent labelContent, SKCanvas canvas, float x, float y)
         {
             using var toLabel = this._labelDrawer.Draw(TO_HEADER_TEXT, labelContent.ToAddress);
             using var fromLabel = this._labelDrawer.Draw(FROM_HEADER_TEXT, labelContent.FromAddress);

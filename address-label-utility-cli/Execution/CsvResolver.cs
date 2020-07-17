@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using AddressLabelUtilityCli.Arguments;
 using AddressLabelUtilityCli.Extensions;
-using AddressLabelUtilityCore.Csv.Convert;
+using AddressLabelUtilityCore.Csv.Converter;
 
-namespace AddressLabelUtilityCli.Execute
+namespace AddressLabelUtilityCli.Execution
 {
     internal static class CsvResolver
     {

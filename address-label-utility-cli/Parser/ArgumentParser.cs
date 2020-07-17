@@ -8,7 +8,7 @@ using AddressLabelUtilityCli.Arguments.Pdf;
 using AddressLabelUtilityCli.Extensions;
 using AddressLabelUtilityCli.Helper;
 
-namespace AddressLabelUtilityCli.Parse
+namespace AddressLabelUtilityCli.Parser
 {
     internal class ArgumentParser : IParser
     {

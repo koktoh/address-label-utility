@@ -1,9 +1,9 @@
-﻿using AddressLabelUtilityCore.Csv.Convert.Booth;
-using AddressLabelUtilityCore.Csv.Convert.ClickPost;
-using AddressLabelUtilityCore.Csv.Convert.Default;
+﻿using AddressLabelUtilityCore.Csv.Converter.Booth;
+using AddressLabelUtilityCore.Csv.Converter.ClickPost;
+using AddressLabelUtilityCore.Csv.Converter.Default;
 using AddressLabelUtilityCore.Csv.Models;
 
-namespace AddressLabelUtilityCore.Csv.Convert
+namespace AddressLabelUtilityCore.Csv.Converter
 {
     public static class ConverterFactory
     {

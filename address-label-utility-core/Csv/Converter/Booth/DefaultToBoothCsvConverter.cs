@@ -3,7 +3,7 @@ using System.Linq;
 using AddressLabelUtilityCore.Csv.Models;
 using AddressLabelUtilityCore.Extensions;
 
-namespace AddressLabelUtilityCore.Csv.Convert.Booth
+namespace AddressLabelUtilityCore.Csv.Converter.Booth
 {
     internal class DefaultToBoothCsvConverter : IConverter
     {

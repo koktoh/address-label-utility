@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
 using System.Windows;
 using AddressLabelUtility.Models.Pdf;
 using AddressLabelUtilityCore.Address;
-using AddressLabelUtilityCore.Csv.Infer;
+using AddressLabelUtilityCore.Csv.Inference;
 using AddressLabelUtilityCore.Csv.IO;
 using AddressLabelUtilityCore.Exceptions;
 using AddressLabelUtilityCore.Extensions;

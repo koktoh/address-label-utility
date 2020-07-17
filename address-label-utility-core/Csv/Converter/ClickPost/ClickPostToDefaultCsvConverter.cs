@@ -2,9 +2,9 @@
 using AddressLabelUtilityCore.Csv.Models;
 using AddressLabelUtilityCore.Extensions;
 
-namespace AddressLabelUtilityCore.Csv.Convert.Booth
+namespace AddressLabelUtilityCore.Csv.Converter.ClickPost
 {
-    internal class BoothToDefaultCsvConverter : IConverter
+    internal class ClickPostToDefaultCsvConverter : IConverter
     {
         public IEnumerable<ICsvModel> Convert(IEnumerable<ICsvModel> records)
         {

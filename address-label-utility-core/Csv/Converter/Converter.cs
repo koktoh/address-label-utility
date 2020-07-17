@@ -4,7 +4,7 @@ using System.Linq;
 using AddressLabelUtilityCore.Csv.Models;
 using AddressLabelUtilityCore.Exceptions;
 
-namespace AddressLabelUtilityCore.Csv.Convert
+namespace AddressLabelUtilityCore.Csv.Converter
 {
     public class Converter : IConverter
     {

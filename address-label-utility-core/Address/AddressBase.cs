@@ -11,7 +11,7 @@ namespace AddressLabelUtilityCore.Address
         public abstract string Address3 { get; set; }
         public abstract string Address4 { get; set; }
         public abstract string Address5 { get; set; }
-        public virtual string FullAddress { get => $"{this.Address1}{this.Address2}{this.Address3}{this.Address4}{this.Address5}"; }
+        public virtual string FullAddress => $"{this.Address1}{this.Address2}{this.Address3}{this.Address4}{this.Address5}";
         public abstract string Name { get; set; }
         public abstract NameSuffix NameSuffix { get; set; }
         public abstract string PhoneNumber { get; set; }
@@ -41,7 +41,7 @@ namespace AddressLabelUtilityCore.Address
             builder.AppendLine($"{this.Address4}{this.Address5}");
             builder.AppendLine($"");
             builder.AppendLine($"");
-            builder.AppendLine($"{this.Name}{(this.NameSuffix!=NameSuffix.なし?this.NameSuffix.ToString():string.Empty)}");
+            builder.AppendLine($"{this.Name}{(this.NameSuffix != NameSuffix.なし ? this.NameSuffix.ToString() : string.Empty)}");
 
             if (this.PhoneNumber.HasMeaningfulValue())
             {

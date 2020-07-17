@@ -6,8 +6,9 @@
     <RootNamespace>AddressLabelUtility</RootNamespace>
     <UseWPF>true</UseWPF>
     <AssemblyName>AddressLabelUtility</AssemblyName>
-    <Version>0.3.0</Version>
+    <Version>0.3.1</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Authors>koktoh</Authors>
   </PropertyGroup>
 
   <ItemGroup>

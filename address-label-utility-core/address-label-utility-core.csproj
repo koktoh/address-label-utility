@@ -4,8 +4,9 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>AddressLabelUtilityCore</RootNamespace>
     <AssemblyName>AddressLabelUtilityCore</AssemblyName>
-    <Version>0.2.1</Version>
+    <Version>0.2.2</Version>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Authors>koktoh</Authors>
   </PropertyGroup>
 
   <ItemGroup>

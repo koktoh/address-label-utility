@@ -3,7 +3,7 @@ using AddressLabelUtilityCli.Arguments;
 using AddressLabelUtilityCli.Arguments.Common;
 using AddressLabelUtilityCli.Messenger;
 
-namespace AddressLabelUtilityCli.Execute
+namespace AddressLabelUtilityCli.Execution
 {
     internal class DefaultExecutor : IExecutor
     {
