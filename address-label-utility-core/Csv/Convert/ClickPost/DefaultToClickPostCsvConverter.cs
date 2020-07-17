@@ -13,7 +13,7 @@ namespace AddressLabelUtilityCore.Csv.Convert.ClickPost
 
             return dest.Select(x =>
             {
-                if(x.Address5.HasMeaningfulValue())
+                if (x.Address5.HasMeaningfulValue())
                 {
                     x.Address1 += x.Address2;
                     x.Address2 = x.Address3;

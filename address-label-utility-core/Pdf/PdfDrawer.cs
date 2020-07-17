@@ -142,7 +142,6 @@ namespace AddressLabelUtilityCore.Pdf
             {
                 this.DrawLabelVartical(labelContent, canvas, x, y);
             }
-
         }
 
         private void DrawLabelHorizontal(LabelContent labelContent, SKCanvas canvas, float x, float y)
