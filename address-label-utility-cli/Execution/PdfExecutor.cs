@@ -11,7 +11,7 @@ using AddressLabelUtilityCore.Csv.IO;
 using AddressLabelUtilityCore.Label;
 using AddressLabelUtilityCore.Pdf;
 
-namespace AddressLabelUtilityCli.Execute
+namespace AddressLabelUtilityCli.Execution
 {
     internal class PdfExecutor : ExecutorBase
     {

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using AddressLabelUtilityCli.Execute;
+using AddressLabelUtilityCli.Execution;
 using AddressLabelUtilityCli.Messenger;
-using AddressLabelUtilityCli.Parse;
+using AddressLabelUtilityCli.Parser;
 using AddressLabelUtilityCli.Validation;
 
 namespace AddressLabelUtilityCli

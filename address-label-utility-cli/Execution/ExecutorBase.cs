@@ -5,7 +5,7 @@ using AddressLabelUtilityCli.Arguments.Common;
 using AddressLabelUtilityCli.Extensions;
 using AddressLabelUtilityCli.Messenger;
 
-namespace AddressLabelUtilityCli.Execute
+namespace AddressLabelUtilityCli.Execution
 {
     internal abstract class ExecutorBase : IExecutor
     {

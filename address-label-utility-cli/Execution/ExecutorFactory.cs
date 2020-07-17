@@ -4,7 +4,7 @@ using AddressLabelUtilityCli.Arguments;
 using AddressLabelUtilityCli.Arguments.Common;
 using AddressLabelUtilityCli.Extensions;
 
-namespace AddressLabelUtilityCli.Execute
+namespace AddressLabelUtilityCli.Execution
 {
     internal class ExecutorFactory : IExecutorFactory
     {

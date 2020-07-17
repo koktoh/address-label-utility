@@ -9,7 +9,7 @@ using AddressLabelUtilityCore.Csv.Converter;
 using AddressLabelUtilityCore.Csv.IO;
 using AddressLabelUtilityCore.Csv.Models;
 
-namespace AddressLabelUtilityCli.Execute
+namespace AddressLabelUtilityCli.Execution
 {
     internal class CsvExecutor : ExecutorBase
     {

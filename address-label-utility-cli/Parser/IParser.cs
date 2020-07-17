@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AddressLabelUtilityCli.Arguments;
 
-namespace AddressLabelUtilityCli.Parse
+namespace AddressLabelUtilityCli.Parser
 {
     interface IParser
     {
