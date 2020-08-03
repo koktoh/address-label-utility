@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using AddressLabelUtilityCli.Arguments;
 using AddressLabelUtilityCli.Extensions;
-using AddressLabelUtilityCore.Csv.Converter;
 
 namespace AddressLabelUtilityCli.Execution
 {
     internal static class CsvResolver
     {
-        private static readonly IReadOnlyDictionary<CsvKind, ConvertKind> _kindDict = new Dictionary<CsvKind, ConvertKind>
+        private static readonly IReadOnlyDictionary<CsvKind, AddressLabelUtilityCore.Csv.CsvKind> _kindDict = new Dictionary<CsvKind, AddressLabelUtilityCore.Csv.CsvKind>
         {
-            { CsvKind.Default, ConvertKind.デフォルト },
-            { CsvKind.Booth, ConvertKind.BOOTH },
-            { CsvKind.ClickPost, ConvertKind.クリックポスト },
+            { CsvKind.Default, AddressLabelUtilityCore.Csv.CsvKind.デフォルト },
+            { CsvKind.Booth, AddressLabelUtilityCore.Csv.CsvKind.BOOTH },
+            { CsvKind.ClickPost, AddressLabelUtilityCore.Csv.CsvKind.クリックポスト },
         };
 
-        private static readonly IReadOnlyDictionary<ConvertKind, CsvKind> _argumentDict = new Dictionary<ConvertKind, CsvKind>
+        private static readonly IReadOnlyDictionary<AddressLabelUtilityCore.Csv.CsvKind, CsvKind> _argumentDict = new Dictionary<AddressLabelUtilityCore.Csv.CsvKind, CsvKind>
         {
-            { ConvertKind.デフォルト, CsvKind.Default },
-            { ConvertKind.BOOTH, CsvKind.Booth },
-            { ConvertKind.クリックポスト, CsvKind.ClickPost },
+            { AddressLabelUtilityCore.Csv.CsvKind.デフォルト, CsvKind.Default },
+            { AddressLabelUtilityCore.Csv.CsvKind.BOOTH, CsvKind.Booth },
+            { AddressLabelUtilityCore.Csv.CsvKind.クリックポスト, CsvKind.ClickPost },
         };
 
         public static Type ResolveType(IArgument argument)
@@ -35,7 +34,7 @@ namespace AddressLabelUtilityCli.Execution
             if (argument.IsDefinedEnumValue<CsvKind>()
                     && _kindDict.TryGetValue(argument.GetArgumentAsEnum<CsvKind>(), out var result))
             {
-                return ConvertTypeResolver.Resolve(result);
+                return AddressLabelUtilityCore.Csv.CsvTypeResolver.Resolve(result);
             }
 
             var list = Enum.GetNames(typeof(CsvKind))
@@ -46,7 +45,7 @@ namespace AddressLabelUtilityCli.Execution
 
         public static string ResolveArgument(Type type)
         {
-            var target = ConvertKindResolver.Resolve(type);
+            var target = AddressLabelUtilityCore.Csv.CsvKindResolver.Resolve(type);
 
             if (_argumentDict.TryGetValue(target, out var result))
             {
