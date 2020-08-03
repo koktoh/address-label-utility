@@ -80,7 +80,7 @@ namespace AddressLabelUtilityCore.Label
         {
             var origin = new SKPoint(this._layoutProperty.LabelWidth * 0.05f, this._layoutProperty.LabelHeaderHeight * 1.2f);
 
-            this.DrawMultiLineText(canvas, origin, address.ToString());
+            this.DrawMultiLineText(canvas, origin, address.ToAddressString());
         }
 
         private void DrawMultiLineText(SKCanvas canvas, SKPoint origin, string text)

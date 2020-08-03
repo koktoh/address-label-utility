@@ -31,7 +31,7 @@ namespace AddressLabelUtilityCore.Address
             this.PhoneNumber = @base.PhoneNumber;
         }
 
-        public override string ToString()
+        public string ToAddressString()
         {
             var builder = new StringBuilder();
 
@@ -39,9 +39,9 @@ namespace AddressLabelUtilityCore.Address
             builder.AppendLine();
             builder.AppendLine($"{this.Address1}{this.Address2}{this.Address3}");
             builder.AppendLine($"{this.Address4}{this.Address5}");
-            builder.AppendLine($"");
-            builder.AppendLine($"");
-            builder.AppendLine($"{this.Name}{(this.NameSuffix != NameSuffix.なし ? this.NameSuffix.ToString() : string.Empty)}");
+            builder.AppendLine();
+            builder.AppendLine();
+            builder.AppendLine($"{this.Name}{(this.NameSuffix != NameSuffix.なし ? $" {this.NameSuffix.ToString()}" : string.Empty)}");
 
             if (this.PhoneNumber.HasMeaningfulValue())
             {

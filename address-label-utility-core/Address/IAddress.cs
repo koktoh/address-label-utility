@@ -12,5 +12,6 @@
         public string Name { get; set; }
         public NameSuffix NameSuffix { get; set; }
         public string PhoneNumber { get; set; }
+        public string ToAddressString();
     }
 }
