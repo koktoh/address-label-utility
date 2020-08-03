@@ -8,9 +8,9 @@ namespace AddressLabelUtility.Models.Csv
     internal class CsvBuilder
     {
         private readonly IConverter _converter;
-        private readonly CsvBuildContext _context;
+        private readonly CsvBuildingContext _context;
 
-        public CsvBuilder(CsvBuildContext context)
+        public CsvBuilder(CsvBuildingContext context)
         {
             this._converter = ConverterFactory.Create(context.ConvertFrom, context.ConvertTo);
             this._context = context;

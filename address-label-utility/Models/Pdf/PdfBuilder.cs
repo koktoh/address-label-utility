@@ -4,9 +4,9 @@ namespace AddressLabelUtility.Models.Pdf
 {
     internal class PdfBuilder
     {
-        private readonly PdfBuildContext _context;
+        private readonly PdfBuildingContext _context;
 
-        public PdfBuilder(PdfBuildContext context)
+        public PdfBuilder(PdfBuildingContext context)
         {
             this._context = context;
         }
