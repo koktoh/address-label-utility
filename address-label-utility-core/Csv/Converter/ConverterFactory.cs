@@ -17,7 +17,7 @@ namespace AddressLabelUtilityCore.Csv.Converter
             return new Converter(toDefaultConverter, fromDefaultConverter);
         }
 
-        public static IConverter Create(ConvertKind from, ConvertKind to)
+        public static IConverter Create(CsvKind from, CsvKind to)
         {
             var toDefaultConverter = GetToDefaultConverter(from);
             var fromDefaultConverter = GetFromDefaultConverter(to);
@@ -42,12 +42,12 @@ namespace AddressLabelUtilityCore.Csv.Converter
             }
         }
 
-        private static IConverter GetToDefaultConverter(ConvertKind kind)
+        private static IConverter GetToDefaultConverter(CsvKind kind)
         {
             return kind switch
             {
-                ConvertKind.BOOTH => new BoothToDefaultCsvConverter(),
-                ConvertKind.クリックポスト => new ClickPostToDefaultCsvConverter(),
+                CsvKind.BOOTH => new BoothToDefaultCsvConverter(),
+                CsvKind.クリックポスト => new ClickPostToDefaultCsvConverter(),
                 _ => new DefaultConverter(),
             };
         }
@@ -69,12 +69,12 @@ namespace AddressLabelUtilityCore.Csv.Converter
             }
         }
 
-        private static IConverter GetFromDefaultConverter(ConvertKind kind)
+        private static IConverter GetFromDefaultConverter(CsvKind kind)
         {
             return kind switch
             {
-                ConvertKind.BOOTH => new DefaultToBoothCsvConverter(),
-                ConvertKind.クリックポスト => new DefaultToClickPostCsvConverter(),
+                CsvKind.BOOTH => new DefaultToBoothCsvConverter(),
+                CsvKind.クリックポスト => new DefaultToClickPostCsvConverter(),
                 _ => new DefaultConverter(),
             };
         }
