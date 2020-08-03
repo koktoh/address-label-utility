@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using AddressLabelUtility.Models.Pdf;
 using AddressLabelUtilityCore.Address;
@@ -22,7 +23,7 @@ namespace AddressLabelUtility.ViewModels
 
         private readonly LabelContext _labelContext;
         private readonly PdfContext _pdfContext;
-        private readonly Inferencer _inferencer;
+        private readonly CsvTypeInferencer _inferencer;
         private readonly OpenFileDialog _dialog;
 
         private string _outputPath;
@@ -135,22 +136,22 @@ namespace AddressLabelUtility.ViewModels
         #region Commands
 
         public DelegateCommand ExecuteCommand
-            => this._executeCommand ??= new DelegateCommand(this.Execute);
+            => this._executeCommand ??= new DelegateCommand(async () => { await this.ExecuteAsync(); });
 
         public DelegateCommand OpenToAddressFileCommand
-            => this._openToAddressFileCommand ??= new DelegateCommand(this.OpenToAddressFile);
+            => this._openToAddressFileCommand ??= new DelegateCommand(async () => { await this.OpenToAddressFileAsync(); });
 
         public DelegateCommand OpenFromAddressFileCommand
-            => this._openFromAddressFileCommand ??= new DelegateCommand(this.OpenFromAddressFile);
+            => this._openFromAddressFileCommand ??= new DelegateCommand(async () => { await this.OpenFromAddressFileAsync(); });
 
         public DelegateCommand<DragEventArgs> PreviewDragOverCommand
             => this._previewDragOverCommand ??= new DelegateCommand<DragEventArgs>(this.PreviewDragOver);
 
         public DelegateCommand<DragEventArgs> DropToAddressCommand
-            => this._dropToAddressCommand ??= new DelegateCommand<DragEventArgs>(this.DropToAddress);
+            => this._dropToAddressCommand ??= new DelegateCommand<DragEventArgs>(async args => { await this.DropToAddressAsync(args); });
 
         public DelegateCommand<DragEventArgs> DropFromAddressCommand
-            => this._dropFromAddressCommand ??= new DelegateCommand<DragEventArgs>(this.DropFromAddress);
+            => this._dropFromAddressCommand ??= new DelegateCommand<DragEventArgs>(async args => { await this.DropFromAddressAsync(args); });
 
         #endregion
 
@@ -158,7 +159,7 @@ namespace AddressLabelUtility.ViewModels
 
         public LabelMakerViewModel()
         {
-            this._inferencer = new Inferencer();
+            this._inferencer = new CsvTypeInferencer();
 
             this._dialog = new OpenFileDialog
             {
@@ -187,7 +188,7 @@ namespace AddressLabelUtility.ViewModels
 
         #region Methods
 
-        public void Execute()
+        public async Task ExecuteAsync()
         {
             if (this.ToAddressList.Count(x => x.IsSelected) <= 0)
             {
@@ -201,28 +202,33 @@ namespace AddressLabelUtility.ViewModels
                 return;
             }
 
+            this.Status = "PDF 作成中...";
+
             try
             {
-                this._pdfContext.OutputPath = this.OutputPath;
-                this._pdfContext.FileName = this.FileName;
-                this._pdfContext.PdfSizeSet = this.PdfSize;
-                this._pdfContext.Dpi = this.Dpi;
-                this._pdfContext.IsVisibleSeparateLine = this.IsVisibleLine;
-
-                this._labelContext.OutlineWidth = this.LineWidth;
-                this._labelContext.MarginRatio = this.MarginRatio;
-                this._labelContext.ParPage = this.ParPage;
-
-                var context = new PdfBuildContext
+                await Task.Run(() =>
                 {
-                    PdfContext = this._pdfContext,
-                    LabelContext = this._labelContext,
-                    ToAddressList = this.ToAddressList.Where(x => x.IsSelected),
-                    FromAddress = this.FromAddressList.FirstOrDefault(x => x.IsSelected)
-                };
+                    this._pdfContext.OutputPath = this.OutputPath;
+                    this._pdfContext.FileName = this.FileName;
+                    this._pdfContext.PdfSizeSet = this.PdfSize;
+                    this._pdfContext.Dpi = this.Dpi;
+                    this._pdfContext.IsVisibleSeparateLine = this.IsVisibleLine;
 
-                var builder = new PdfBuilder(context);
-                builder.Build();
+                    this._labelContext.OutlineWidth = this.LineWidth;
+                    this._labelContext.MarginRatio = this.MarginRatio;
+                    this._labelContext.ParPage = this.ParPage;
+
+                    var context = new PdfBuildingContext
+                    {
+                        PdfContext = this._pdfContext,
+                        LabelContext = this._labelContext,
+                        ToAddressList = this.ToAddressList.Where(x => x.IsSelected),
+                        FromAddress = this.FromAddressList.FirstOrDefault(x => x.IsSelected)
+                    };
+
+                    var builder = new PdfBuilder(context);
+                    builder.Build();
+                });
             }
             catch (Exception ex) when (ex is LayoutException || ex is LabelException || ex is PdfException)
             {
@@ -238,44 +244,58 @@ namespace AddressLabelUtility.ViewModels
             this.Status = "出力終了";
         }
 
-        public void OpenToAddressFile()
+        public async Task OpenToAddressFileAsync()
         {
             if (this._dialog.ShowDialog() == true)
             {
-                this.FillToAddressInfo(this._dialog.FileName);
+                await this.FillToAddressInfo(this._dialog.FileName);
             }
         }
 
-        public void OpenFromAddressFile()
+        public async Task OpenFromAddressFileAsync()
         {
             if (this._dialog.ShowDialog() == true)
             {
-                this.FillFromAddressInfo(this._dialog.FileName);
+                await this.FillFromAddressInfo(this._dialog.FileName);
             }
         }
 
-        private void FillToAddressInfo(string path)
+        private async Task FillToAddressInfo(string path)
         {
-            var type = this.InferCsvModel(path);
+            this.Status = "宛て先ファイル読み込み中...";
 
-            var addressList = CsvReader.Read(type, path)
-                .Cast<IAddress>()
-                .Select(x => new BindableAddress(x));
+            await Task.Run(() =>
+            {
+                var type = this.InferCsvModel(path);
 
-            this.ToAddressSrcPath = path;
-            this.ToAddressList = new ObservableCollection<BindableAddress>(addressList);
+                var addressList = CsvReader.Read(type, path)
+                    .Cast<IAddress>()
+                    .Select(x => new BindableAddress(x));
+
+                this.ToAddressSrcPath = path;
+                this.ToAddressList = new ObservableCollection<BindableAddress>(addressList);
+            });
+
+            this.Status = "宛て先ファイル読み込み終了";
         }
 
-        private void FillFromAddressInfo(string path)
+        private async Task FillFromAddressInfo(string path)
         {
-            var type = this.InferCsvModel(path);
+            this.Status = "差出人ファイル読み込み中...";
 
-            var addressList = CsvReader.Read(type, path)
-                .Cast<IAddress>()
-                .Select(x => new BindableAddress(x));
+            await Task.Run(() =>
+            {
+                var type = this.InferCsvModel(path);
 
-            this.FromAddressSrcPath = path;
-            this.FromAddressList = new ObservableCollection<BindableAddress>(addressList);
+                var addressList = CsvReader.Read(type, path)
+                    .Cast<IAddress>()
+                    .Select(x => new BindableAddress(x));
+
+                this.FromAddressSrcPath = path;
+                this.FromAddressList = new ObservableCollection<BindableAddress>(addressList);
+            });
+
+            this.Status = "差出人ファイル読み込み終了";
         }
 
         private bool IsCsvFile(string path)
@@ -303,7 +323,7 @@ namespace AddressLabelUtility.ViewModels
             e.Handled = true;
         }
 
-        public void DropToAddress(DragEventArgs e)
+        public async Task DropToAddressAsync(DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -319,7 +339,7 @@ namespace AddressLabelUtility.ViewModels
 
             try
             {
-                this.FillToAddressInfo(file);
+                await this.FillToAddressInfo(file);
             }
             catch
             {
@@ -327,7 +347,7 @@ namespace AddressLabelUtility.ViewModels
             }
         }
 
-        public void DropFromAddress(DragEventArgs e)
+        public async Task DropFromAddressAsync(DragEventArgs e)
         {
             if (!e.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -343,7 +363,7 @@ namespace AddressLabelUtility.ViewModels
 
             try
             {
-                this.FillFromAddressInfo(file);
+                await this.FillFromAddressInfo(file);
             }
             catch
             {
