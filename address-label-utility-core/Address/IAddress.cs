@@ -12,6 +12,9 @@
         public string Name { get; set; }
         public NameSuffix NameSuffix { get; set; }
         public string PhoneNumber { get; set; }
+
+        public string GetFormattedPostCode();
+        public string GetFormattedPhoneNumber();
         public string ToAddressString();
     }
 }
