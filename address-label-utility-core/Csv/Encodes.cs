@@ -11,7 +11,7 @@ namespace AddressLabelUtilityCore.Csv
         ShiftJis,
     }
 
-    public static class EncodesResolver
+    public static class EncodesExtensions
     {
         private static readonly IReadOnlyDictionary<Encodes, Encoding> _encodesMap = new Dictionary<Encodes, Encoding>
         {
@@ -19,6 +19,19 @@ namespace AddressLabelUtilityCore.Csv
             { Encodes.ShiftJis, Encoding.GetEncoding("shift-jis") },
         };
 
+        public static Encoding GetEncoding(this Encodes encode)
+        {
+            if (_encodesMap.TryGetValue(encode, out var result))
+            {
+                return result;
+            }
+
+            return Encoding.UTF8;
+        }
+    }
+
+    public static class EncodesResolver
+    {
         public static Encoding Resolve<T>()
             where T : ICsvModel
         {
@@ -29,16 +42,10 @@ namespace AddressLabelUtilityCore.Csv
         {
             try
             {
-                var encode = (Encodes)type.GetProperty("Encode").GetValue(Activator.CreateInstance(type));
+                var encode = (Encodes)type.GetProperty(nameof(ICsvModel.Encode))
+                    .GetValue(Activator.CreateInstance(type));
 
-                if (_encodesMap.TryGetValue(encode, out var value))
-                {
-                    return value;
-                }
-                else
-                {
-                    return Encoding.UTF8;
-                }
+                return encode.GetEncoding();
             }
             catch
             {
