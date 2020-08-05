@@ -12,7 +12,7 @@ using Hnx8.ReadJEnc;
 
 namespace AddressLabelUtilityCore.Csv.Inference
 {
-    public class Inferencer
+    public class CsvTypeInferencer
     {
         private readonly int _defaultCsvFieldCount;
         private readonly int _boothCsvFieldCount;
@@ -21,7 +21,7 @@ namespace AddressLabelUtilityCore.Csv.Inference
         private readonly IReadOnlyCollection<string> _boothCsvHeaderList;
         private readonly IReadOnlyCollection<string> _clicPostCsvHeaderList;
 
-        public Inferencer()
+        public CsvTypeInferencer()
         {
             this._defaultCsvFieldCount = this.GetFieldCount<DefaultAddressCsvModel>();
             this._boothCsvFieldCount = this.GetFieldCount<BoothAddressCsvModel>();

@@ -6,7 +6,7 @@ using AddressLabelUtilityCore.Utilities;
 
 namespace AddressLabelUtilityCore.Layout
 {
-    public class LayoutDesigner
+    internal class LayoutDesigner
     {
         private readonly LabelContext _labelContext;
 

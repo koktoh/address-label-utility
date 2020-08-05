@@ -26,6 +26,10 @@ namespace AddressLabelUtility.ViewModels
 
         public string FullAddress { get; }
 
+        public string GetFormattedPostCode() => string.Empty;
+        public string GetFormattedPhoneNumber() => string.Empty;
+        public string ToAddressString() => string.Empty;
+
         public bool IsSelected
         {
             get { return this._isSelected; }

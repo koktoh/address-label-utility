@@ -5,6 +5,7 @@ using AddressLabelUtilityCli.Arguments;
 using AddressLabelUtilityCli.Arguments.Common;
 using AddressLabelUtilityCli.Arguments.Csv;
 using AddressLabelUtilityCli.Extensions;
+using AddressLabelUtilityCore.Csv;
 using AddressLabelUtilityCore.Csv.Converter;
 using AddressLabelUtilityCore.Csv.IO;
 using AddressLabelUtilityCore.Csv.Models;
@@ -25,8 +26,8 @@ namespace AddressLabelUtilityCli.Execution
             var srcType = CsvResolver.ResolveType(srcTypeArg);
             var destType = CsvResolver.ResolveType(destTypeArg);
 
-            var srcConvertKind = ConvertKindResolver.Resolve(srcType);
-            var destConvertKind = ConvertKindResolver.Resolve(destType);
+            var srcConvertKind = CsvKindResolver.Resolve(srcType);
+            var destConvertKind = CsvKindResolver.Resolve(destType);
 
             try
             {

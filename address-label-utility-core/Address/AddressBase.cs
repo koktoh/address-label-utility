@@ -1,10 +1,14 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 using AddressLabelUtilityCore.Extensions;
 
 namespace AddressLabelUtilityCore.Address
 {
     public abstract class AddressBase : IAddress
     {
+        protected readonly Regex _postCodeRex;
+        protected readonly Regex _phoneNumberRex;
+
         public abstract string PostCode { get; set; }
         public abstract string Address1 { get; set; }
         public abstract string Address2 { get; set; }
@@ -16,9 +20,13 @@ namespace AddressLabelUtilityCore.Address
         public abstract NameSuffix NameSuffix { get; set; }
         public abstract string PhoneNumber { get; set; }
 
-        protected AddressBase() { }
+        protected AddressBase()
+        {
+            this._postCodeRex = new Regex(@"^(\d{3})-?(\d{4})$");
+            this._phoneNumberRex = new Regex(@"^(0\d0|0\d{1,4})-?(\d{1,4})-?(\d{4})$");
+        }
 
-        protected AddressBase(IAddress @base)
+        protected AddressBase(IAddress @base) : this()
         {
             this.PostCode = @base.PostCode;
             this.Address1 = @base.Address1;
@@ -31,17 +39,47 @@ namespace AddressLabelUtilityCore.Address
             this.PhoneNumber = @base.PhoneNumber;
         }
 
-        public override string ToString()
+        public virtual string GetFormattedPostCode()
+        {
+            if (this.PostCode.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
+            if (!this._postCodeRex.IsMatch(this.PostCode))
+            {
+                return string.Empty;
+            }
+
+            return this._postCodeRex.Replace(this.PostCode, @"〒$1-$2");
+        }
+
+        public virtual string GetFormattedPhoneNumber()
+        {
+            if (this.PhoneNumber.IsNullOrWhiteSpace())
+            {
+                return string.Empty;
+            }
+
+            if (!this._phoneNumberRex.IsMatch(this.PhoneNumber))
+            {
+                return string.Empty;
+            }
+
+            return this._phoneNumberRex.Replace(this.PhoneNumber, @"$1-$2-$3");
+        }
+
+        public string ToAddressString()
         {
             var builder = new StringBuilder();
 
-            builder.AppendLine($"〒{this.PostCode}");
+            builder.AppendLine(this.GetFormattedPostCode());
             builder.AppendLine();
             builder.AppendLine($"{this.Address1}{this.Address2}{this.Address3}");
             builder.AppendLine($"{this.Address4}{this.Address5}");
-            builder.AppendLine($"");
-            builder.AppendLine($"");
-            builder.AppendLine($"{this.Name}{(this.NameSuffix != NameSuffix.なし ? this.NameSuffix.ToString() : string.Empty)}");
+            builder.AppendLine();
+            builder.AppendLine();
+            builder.AppendLine($"{this.Name}{(this.NameSuffix != NameSuffix.なし ? $" {this.NameSuffix.ToString()}" : string.Empty)}");
 
             if (this.PhoneNumber.HasMeaningfulValue())
             {

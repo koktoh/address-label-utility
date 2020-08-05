@@ -4,12 +4,12 @@ namespace AddressLabelUtilityCore.Label
 {
     public class LabelContent
     {
-        public AddressBase ToAddress { get; set; }
-        public AddressBase FromAddress { get; set; }
+        public IAddress ToAddress { get; set; }
+        public IAddress FromAddress { get; set; }
 
         public LabelContent() { }
 
-        public LabelContent(AddressBase toAddress, AddressBase fromAddress)
+        public LabelContent(IAddress toAddress, IAddress fromAddress)
         {
             this.ToAddress = toAddress;
             this.FromAddress = fromAddress;

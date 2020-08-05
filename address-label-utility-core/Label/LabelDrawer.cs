@@ -19,7 +19,7 @@ namespace AddressLabelUtilityCore.Label
             this._layoutProperty = layoutProperty;
         }
 
-        public SKBitmap Draw(string header, AddressBase address)
+        public SKBitmap Draw(string header, IAddress address)
         {
             try
             {
@@ -76,11 +76,11 @@ namespace AddressLabelUtilityCore.Label
             canvas.Save();
         }
 
-        private void DrawAddress(SKCanvas canvas, AddressBase address)
+        private void DrawAddress(SKCanvas canvas, IAddress address)
         {
             var origin = new SKPoint(this._layoutProperty.LabelWidth * 0.05f, this._layoutProperty.LabelHeaderHeight * 1.2f);
 
-            this.DrawMultiLineText(canvas, origin, address.ToString());
+            this.DrawMultiLineText(canvas, origin, address.ToAddressString());
         }
 
         private void DrawMultiLineText(SKCanvas canvas, SKPoint origin, string text)

@@ -13,11 +13,11 @@ namespace AddressLabelUtilityCli.Arguments
 {
     internal class ArgumentNormalizer : IArgumentNormalizer
     {
-        private readonly Inferencer _inferencer;
+        private readonly CsvTypeInferencer _inferencer;
 
         public ArgumentNormalizer()
         {
-            this._inferencer = new Inferencer();
+            this._inferencer = new CsvTypeInferencer();
         }
 
         public IEnumerable<IArgument> Normalize(IEnumerable<IArgument> args)
